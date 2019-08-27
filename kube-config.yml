@@ -1,0 +1,99 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  labels:
+    io.kompose.service: mongodb-data
+  name: mongodb-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  labels:
+    io.kompose.service: webprotege-data
+  name: webprotege-data
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: ita-webprotege-db
+  labels:
+    app: ita-webprotege-db
+spec:
+  containers:
+  - name: mongodb
+    image: ITAContainerRegistry.azurecr.io/ita-webprotege/db:latest
+    imagePullPolicy: Always
+    ports:
+    - containerPort: 27017
+    volumeMounts:
+    - mountPath: /data/db
+      name: mongodb-data
+  restartPolicy: Always
+  volumes:
+  - name: mongodb-data
+    persistentVolumeClaim:
+      claimName: mongodb-data
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: ita-webprotege-web
+  labels:
+    app: ita-webprotege-web
+spec:
+  containers:
+  - image: ITAContainerRegistry.azurecr.io/ita-webprotege/web:latest
+    name: webprotege
+    imagePullPolicy: Always
+    ports:
+    - containerPort: 8080
+    volumeMounts:
+    - mountPath: /data/webprotege
+      name: webprotege-data
+  restartPolicy: Always
+  volumes:
+  - name: webprotege-data
+    persistentVolumeClaim:
+      claimName: webprotege-data
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: ita-webprotege-web
+  namespace: default
+spec:
+  selector: ita-webprotege-web
+  ports:
+  - port: 8888
+    targetPort: 8080
+  type: LoadBalancer
+  selector:
+    app: ita-webprotege-web
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: ita-webprotege-db
+  namespace: default
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  selector:
+    app: ita-webprotege-db
