@@ -1,21 +1,17 @@
-version: '2'
-
+version: '3'
 services:
-  webprotege:
-    image: dataservices.azurecr.io/ita-webprotege/web
-    depends_on:
-      - mongodb
+  ita-webprotege-web:
+    image: dataservices.azurecr.io/ita-webprotege/web:latest
     ports:
-      - "8888:8080"
+      - "80:8080"
     volumes:
       - webprotege_data:/data/webprotege
-
-  mongodb:
-    image: dataservices.azurecr.io/ita-webprotege/db
+    restart: always
+  ita-webprotege-db:
+    image: dataservices.azurecr.io/ita-webprotege/db:latest
     volumes:
       - mongodb_data:/data/db
-
+    restart: always
 volumes:
   webprotege_data:
-
   mongodb_data:

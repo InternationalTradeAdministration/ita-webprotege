@@ -7,9 +7,10 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  storageClassName: managed-premium
   resources:
     requests:
-      storage: 100Mi
+      storage: 1Gi
 ---
 
 kind: PersistentVolumeClaim
@@ -21,9 +22,10 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+  storageClassName: managed-premium
   resources:
     requests:
-      storage: 100Mi
+      storage: 1Gi
 ---
 
 kind: Pod
@@ -35,7 +37,7 @@ metadata:
 spec:
   containers:
   - name: mongodb
-    image: ITAContainerRegistry.azurecr.io/ita-webprotege/db:latest
+    image: dataservices.azurecr.io/ita-webprotege/db:latest
     imagePullPolicy: Always
     ports:
     - containerPort: 27017
@@ -56,7 +58,7 @@ metadata:
     app: ita-webprotege-web
 spec:
   containers:
-  - image: ITAContainerRegistry.azurecr.io/ita-webprotege/web:latest
+  - image: dataservices.azurecr.io/ita-webprotege/web:latest
     name: webprotege
     imagePullPolicy: Always
     ports:
@@ -76,10 +78,12 @@ apiVersion: v1
 metadata:
   name: ita-webprotege-web
   namespace: default
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: ita-webprotege
 spec:
   selector: ita-webprotege-web
   ports:
-  - port: 8888
+  - port: 80
     targetPort: 8080
   type: LoadBalancer
   selector:
