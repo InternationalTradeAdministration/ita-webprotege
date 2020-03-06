@@ -2,7 +2,7 @@ version: '2'
 
 services:
   webprotege:
-    image: skyplabs/webprotege
+    image: dataservices.azurecr.io/ita-webprotege/web
     depends_on:
       - mongodb
     ports:
@@ -11,7 +11,7 @@ services:
       - webprotege_data:/data/webprotege
 
   mongodb:
-    image: mongo:3
+    image: dataservices.azurecr.io/ita-webprotege/db
     volumes:
       - mongodb_data:/data/db
 
