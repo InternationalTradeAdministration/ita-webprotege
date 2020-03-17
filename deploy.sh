@@ -10,5 +10,10 @@ sudo docker pull mongo:3
 sudo docker tag mongo:3 dataservices.azurecr.io/ita-webprotege/db
 sudo docker push dataservices.azurecr.io/ita-webprotege/db:latest
 
-kubectl delete pod,service ita-webprotege-web ita-webprotege-db
+kubectl delete deployment,service ita-webprotege-web ita-webprotege-db -n webprotege
+kubectl delete ingress ita-webprotege -n webprotege
+sleep 10 #may need to wait longer...
+
+# kubectl apply -f kube-cluster-issuer.yml
+# kubectl apply -f kube-certificate.yml
 kubectl apply -f kube-config.yml
