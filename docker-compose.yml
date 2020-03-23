@@ -1,17 +1,9 @@
 version: '3'
 services:
   ita-webprotege-web:
-    image: dataservices.azurecr.io/ita-webprotege/web:latest
-    ports:
-      - "80:8080"
-    volumes:
-      - webprotege_data:/data/webprotege
-    restart: always
+    image: itadevacr.azurecr.io/ita-webprotege/web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
   ita-webprotege-db:
-    image: dataservices.azurecr.io/ita-webprotege/db:latest
-    volumes:
-      - mongodb_data:/data/db
-    restart: always
-volumes:
-  webprotege_data:
-  mongodb_data:
+    image: mongo:3
