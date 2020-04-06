@@ -49,12 +49,12 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:3
+        image: itadevacr.azurecr.io/ita-webprotege/db:#{Release.Artifacts._InternationalTradeAdministration.ita-webprotege.BuildId}#
         imagePullPolicy: Always
         ports:
         - containerPort: 27017
         volumeMounts:
-        - mountPath: /data/db
+        - mountPath: /home/data/db
           name: webprotege-mongo-data
       volumes:
       - name: webprotege-mongo-data
@@ -87,7 +87,7 @@ spec:
         ports:
         - containerPort: 8080
         volumeMounts:
-        - mountPath: /data/webprotege
+        - mountPath: /home/data/webprotege
           name: webprotege-data
       volumes:
       - name: webprotege-data

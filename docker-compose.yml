@@ -1,9 +1,19 @@
 version: '3'
 services:
+  ita-webprotege-db:
+    image: itadevacr.azurecr.io/ita-webprotege/db:latest
+    build:
+      context: db
+      dockerfile: Dockerfile
+    volumes:
+      - mongodb_data:/home/data/db
   ita-webprotege-web:
     image: itadevacr.azurecr.io/ita-webprotege/web:latest
     build:
-      context: .
+      context: web
       dockerfile: Dockerfile
-  ita-webprotege-db:
-    image: mongo:3
+    volumes:
+      - webprotege_data:/home/data/webprotege
+volumes:
+  webprotege_data:
+  mongodb_data:

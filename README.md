@@ -55,6 +55,7 @@ The following values must be set in `webprotege.properties` :
 
 * Azure CLI <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest>
 * Docker CLI <https://docs.docker.com/engine/reference/commandline/cli/>
+* Docker Compose <https://docs.docker.com/compose/reference/>
 * KUBECTL CLI (if deploying to AKS) <https://kubernetes.io/docs/tasks/tools/install-kubectl/>
 * Azure Subscription
 * Azure Container Registry (ACR)

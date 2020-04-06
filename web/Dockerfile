@@ -9,7 +9,7 @@ RUN rm -rf *
 
 COPY webprotege-2.5.0.war /usr/local/tomcat/webapps
 
-RUN mkdir -p /data/webprotege
+RUN mkdir -p /home/data/webprotege
 RUN unzip -q webprotege-2.5.0.war -d ROOT
 RUN rm webprotege-2.5.0.war
 
@@ -19,6 +19,6 @@ COPY config/mail.properties ROOT/mail.properties
 RUN sed -i "s/\(application.version *= *\).*/\1$WEBPROTEGE_VERSION/" ROOT/webprotege.properties
 
 EXPOSE 8080
-VOLUME /data/webprotege
+VOLUME /home/data/webprotege
 
 CMD ["catalina.sh", "run"]
