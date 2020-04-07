@@ -49,33 +49,8 @@ The following values must be set in `webprotege.properties` :
  [webprotege]: http://protege.stanford.edu/
  [webprotege-properties]: https://github.com/SkypLabs/webprotege-dockerfile/blob/master/config/webprotege.properties
 
-## AKS Deployment
+## Azure Configuration
 
-**Prerequisites**
-
-* Azure CLI <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest>
-* Docker CLI <https://docs.docker.com/engine/reference/commandline/cli/>
-* Docker Compose <https://docs.docker.com/compose/reference/>
-* KUBECTL CLI (if deploying to AKS) <https://kubernetes.io/docs/tasks/tools/install-kubectl/>
-* Azure Subscription
-* Azure Container Registry (ACR)
-* Azure Kubernetes Service (AKS)
-* A DNS Zone has been configured with a sub-domain that points to an ingress controller in AKS
-* An AKS Ingess Controller with TLS
-  * Additional documentaion: <https://docs.microsoft.com/en-us/azure/aks/ingress-static-ip>
-
-### Scripts & Configuration Files
-
-1. Log in with the Azure CLI: ```az login```
-1. Select the appropriate Subscription. Ex: ```az account set --subscription "Sample_Subscription"```
-1. Get credentials. Ex: ````az aks get-credentials --resource-group my-resources --name myAKS --overwrite-existing````
-1. Rename ```kube-config-template.yml``` to ```kube-config.yml``` and update it with the following:
-        - image locations
-        - namespace for each section
-        - host names in the Ingress section
-1. Update ```deploy-aks.sh``` with the appropriate Azure Container Registry and Azure Container Key
-1. Execute ```deploy-aks.sh```
-1. For Azure DevOps pipeline configuration, update: ```azure-pipelines.yml```
-
-The application will be available at the following URL: [<http://ip-dns-name.location.cloudapp.azure.com>]
-The location in the URL will be the location of the Kubernetes cluster. Ex: eastus, centralus, etc...
+* If deploying this application as a Web App; be sure to set the environment variable WEBSITES_ENABLE_APP_SERVICE_STORAGE to true. This application uses storage volumes that need to persist between container restarts. Documentation realted to this may be found [here](https://docs.microsoft.com/en-us/azure/app-service/containers/configure-custom-container#use-persistent-shared-storage)
+* If deploying this applicaiton in AKS, it will use Persistant Storage, see kube-config.yml
+* For detail related to the deployment of containerized applications in Azure, reference this [repo](https://github.com/InternationalTradeAdministration/azure-samples) with deployment scenarios
