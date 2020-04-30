@@ -7,7 +7,7 @@ pool:
 steps:
   - task: CopyFiles@2
     inputs:
-      Contents: 'kube-config-itadev2.yml'
+      Contents: 'kube-config-*.yml'
       TargetFolder: '$(build.artifactstagingdirectory)'
     displayName: 'Copy Kube Config'
   - task: PublishBuildArtifacts@1
@@ -15,7 +15,7 @@ steps:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
       ArtifactName: 'manifest'
       publishLocation: 'Container'
-    displayName: 'Publish Kube Config'
+    displayName: 'Publish Kube Config Files'
   - task: DockerCompose@0
     inputs:
       containerregistrytype: 'Azure Container Registry'

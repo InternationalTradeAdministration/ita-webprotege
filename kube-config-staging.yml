@@ -1,0 +1,146 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  labels:
+    io.kompose.service: webprotege-mongo-data
+  name: webprotege-mongo-data
+  namespace: mdsnamespace
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  labels:
+    io.kompose.service: webprotege-data
+  name: webprotege-data
+  namespace: mdsnamespace
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: ita-webprotege-db
+  namespace: mdsnamespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate: 
+      maxSurge: 1 
+      maxUnavailable: 1 
+  minReadySeconds: 5  
+  template:
+    metadata:
+      labels:
+        app: ita-webprotege-db
+    spec:
+      containers:
+      - name: mongodb
+        image: itadevacr.azurecr.io/ita-webprotege/db:#{Release.Artifacts._InternationalTradeAdministration.ita-webprotege.BuildId}#
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - mountPath: /home/data/db
+          name: webprotege-mongo-data
+      volumes:
+      - name: webprotege-mongo-data
+        persistentVolumeClaim:
+          claimName: webprotege-mongo-data
+      restartPolicy: Always
+---
+
+kind: Deployment
+apiVersion: apps/v1beta1
+metadata:
+  name: ita-webprotege-web
+  namespace: mdsnamespace
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate: 
+      maxSurge: 1 
+      maxUnavailable: 1 
+  minReadySeconds: 5  
+  template:
+    metadata:
+      labels:
+        app: ita-webprotege-web
+    spec:
+      containers:
+      - image: itadevacr.azurecr.io/ita-webprotege/web:#{Release.Artifacts._InternationalTradeAdministration.ita-webprotege.BuildId}#
+        name: webprotege
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - mountPath: /home/data/webprotege
+          name: webprotege-data
+      volumes:
+      - name: webprotege-data
+        persistentVolumeClaim:
+          claimName: webprotege-data
+      restartPolicy: Always
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: ita-webprotege-web
+  namespace: mdsnamespace
+spec:
+  type: ClusterIP
+  selector: ita-webprotege-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  selector:
+    app: ita-webprotege-web
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: ita-webprotege-db
+  namespace: mdsnamespace
+spec:
+  type: ClusterIP
+  selector:
+      app: ita-webprotege-db
+  ports:
+      - name: mongo-port
+        port: 27017
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: ita-webprotege
+  namespace: mdsnamespace
+spec:
+  rules:
+    - host: webprotege-dev.trade.gov
+      http:
+        paths:
+          - backend:
+              serviceName: ita-webprotege-web
+              servicePort: 80
+            path: /
+  tls:
+    - secretName: trade-gov-tls-secret
