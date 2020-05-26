@@ -6,14 +6,14 @@ services:
       context: db
       dockerfile: Dockerfile
     volumes:
-      - mongodb_data:/home/data/db
+      - mongodb_data:/data/db
   ita-webprotege-web:
     image: itadevacr.azurecr.io/ita-webprotege/web:latest
     build:
       context: web
       dockerfile: Dockerfile
     volumes:
-      - webprotege_data:/home/data/webprotege
+      - webprotege_data:/data/webprotege
 volumes:
   webprotege_data:
   mongodb_data:

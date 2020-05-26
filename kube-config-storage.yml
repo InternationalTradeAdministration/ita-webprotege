@@ -1,0 +1,30 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  labels:
+    io.kompose.service: webprotege-mongo-data
+  name: webprotege-mongo-data
+  namespace: mdsnamespace
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  labels:
+    io.kompose.service: webprotege-data
+  name: webprotege-data
+  namespace: mdsnamespace
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: managed-premium
+  resources:
+    requests:
+      storage: 1Gi

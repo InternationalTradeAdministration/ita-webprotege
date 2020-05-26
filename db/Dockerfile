@@ -1,3 +1,3 @@
 FROM mongo:3
 
-CMD ["mongod", "--dbpath", "/home/data/db"]
+CMD ["mongod", "--dbpath", "/data/db"]
