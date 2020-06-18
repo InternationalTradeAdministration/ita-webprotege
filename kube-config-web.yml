@@ -16,13 +16,16 @@ spec:
         app: ita-webprotege-web
     spec:
       containers:
-      - image: itadevacr.azurecr.io/ita-webprotege/web:#{Release.Artifacts._InternationalTradeAdministration.ita-webprotege.BuildId}#
+      - image: protegeproject/webprotege
         name: webprotege
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        env:
+        - name: webprotege.mongodb.host
+          value: ita-webprotege-db
         volumeMounts:
-        - mountPath: /data/webprotege
+        - mountPath: /srv/webprotege
           name: webprotege-data
       volumes:
       - name: webprotege-data
