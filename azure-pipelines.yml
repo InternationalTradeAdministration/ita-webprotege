@@ -16,21 +16,3 @@ steps:
       ArtifactName: 'manifest'
       publishLocation: 'Container'
     displayName: 'Publish Kube Config Files'
-  - task: DockerCompose@0
-    inputs:
-      containerregistrytype: 'Azure Container Registry'
-      azureSubscription: 'ITADEV2-MSDataServicesAzure'
-      azureContainerRegistry: '{"loginServer":"itadevacr.azurecr.io", "id" : "/subscriptions/675d7977-79af-4b94-b0bd-26d4095a4ffb/resourceGroups/ITA-MSDataServices-Dev-East1/providers/Microsoft.ContainerRegistry/registries/itadevacr"}'
-      dockerComposeFile: '**/docker-compose.yml'
-      action: 'Build services'
-      additionalImageTags: '$(Build.BuildId)'
-    displayName: 'Build Docker images'
-  - task: DockerCompose@0
-    inputs:
-      containerregistrytype: 'Azure Container Registry'
-      azureSubscription: 'ITADEV2-MSDataServicesAzure'
-      azureContainerRegistry: '{"loginServer":"itadevacr.azurecr.io", "id" : "/subscriptions/675d7977-79af-4b94-b0bd-26d4095a4ffb/resourceGroups/ITA-MSDataServices-Dev-East1/providers/Microsoft.ContainerRegistry/registries/itadevacr"}'
-      dockerComposeFile: '**/docker-compose.yml'
-      action: 'Push services'
-      additionalImageTags: '$(Build.BuildId)'
-    displayName: 'Push Docker images'

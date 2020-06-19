@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: itadevacr.azurecr.io/ita-webprotege/db:#{Release.Artifacts._InternationalTradeAdministration.ita-webprotege.BuildId}#
+        image: mongo:4.1-bionic
         imagePullPolicy: Always
         ports:
         - containerPort: 27017
