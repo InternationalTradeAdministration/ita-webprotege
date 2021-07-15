@@ -53,7 +53,7 @@ spec:
     app: ita-webprotege-web
 ---
 
-apiVersion: extensions/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   annotations:
