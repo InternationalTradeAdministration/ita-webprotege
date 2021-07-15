@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 metadata:
   name: ita-webprotege-web
   namespace: mdsnamespace
@@ -50,7 +50,7 @@ spec:
     app: ita-webprotege-web
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: extensions/v1
 kind: Ingress
 metadata:
   annotations:
