@@ -5,6 +5,9 @@ metadata:
   namespace: mdsnamespace
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: ita-webprotege-web
   strategy:
     rollingUpdate: 
       maxSurge: 1 
